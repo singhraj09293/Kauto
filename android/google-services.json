@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "745486855520",
+    "project_id": "kauto-14455",
+    "storage_bucket": "kauto-14455.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:745486855520:android:3d799928f3c8b0fa2d4205",
+        "android_client_info": {
+          "package_name": "com.example.kauto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "745486855520-krh42juoa97jjcmvcf9f3si2pobtit6q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kauto",
+            "certificate_hash": "f97d2baeafaaeb5ec3372ab9507bd7b8c915339e"
+          }
+        },
+        {
+          "client_id": "745486855520-5vndke6g7de60fvd2cpqts3lncceka4h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1zosYW1jY3VVTXj_y3oD2QYLZ8oqNBUk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "745486855520-5vndke6g7de60fvd2cpqts3lncceka4h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
