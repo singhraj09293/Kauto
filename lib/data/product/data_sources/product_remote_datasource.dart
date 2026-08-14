@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:kauto/data/model/product_model.dart';
+import 'package:kauto/data/product/model/product_model.dart';
 
 class ProductRemoteDatasource {
   Future<List<ProductModel>> fetchProducts() async {

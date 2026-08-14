@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:kauto/domain/product.dart';
+import 'package:kauto/domain/product/product.dart';
 
 class ProductModel extends Product {
   ProductModel({
