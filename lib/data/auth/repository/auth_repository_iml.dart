@@ -8,7 +8,7 @@ class AuthRepositoryIml extends AuthRepository {
 
   @override
   Future<void> login(String email, String password) {
-    return login(email, password);
+    return datasource.login(email, password);
   }
 
   @override
