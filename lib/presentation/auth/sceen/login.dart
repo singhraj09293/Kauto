@@ -135,6 +135,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   bool isObscure = true;
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+
+  @override
+  void dispose() {
+    email.dispose();
+    password.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -172,7 +180,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             Row(
               children: [
                 GestureDetector(
-                  onTap: () => Navigator.push(context,MaterialPageRoute(builder: (_)=>ForgetScree())),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => ForgetScree()),
+                  ),
                   child: Text(
                     'Forget Password',
                     style: TextStyle(
@@ -301,8 +312,15 @@ class _SignUpState extends ConsumerState<SignUp> {
   bool isObscurePass = true;
   bool isObscureCon = true;
   TextEditingController emailController = TextEditingController();
-  TextEditingController passwoedController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPass = TextEditingController();
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPass.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -337,7 +355,7 @@ class _SignUpState extends ConsumerState<SignUp> {
         Text('Password', style: TextStyle(color: Colors.grey)),
         SizedBox(height: 3),
         TextField(
-          controller: passwoedController,
+          controller: passwordController,
           obscureText: isObscurePass,
           decoration: InputDecoration(
             suffixIcon: IconButton(
@@ -367,7 +385,7 @@ class _SignUpState extends ConsumerState<SignUp> {
           decoration: InputDecoration(
             errorText:
                 confirmPass.text.isNotEmpty &&
-                    confirmPass.text.trim() != passwoedController.text.trim()
+                    confirmPass.text.trim() != passwordController.text.trim()
                 ? 'Password does not match'
                 : null,
             suffixIcon: IconButton(
@@ -401,7 +419,7 @@ class _SignUpState extends ConsumerState<SignUp> {
                   .read(authRepositoryProvider)
                   .signup(
                     emailController.text.trim(),
-                    passwoedController.text.trim(),
+                    passwordController.text.trim(),
                   );
             } catch (e) {
               ScaffoldMessenger.of(
