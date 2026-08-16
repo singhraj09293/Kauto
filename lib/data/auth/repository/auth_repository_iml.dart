@@ -25,4 +25,9 @@ class AuthRepositoryIml extends AuthRepository {
   Future<void> signup(String email, String pass) {
     return datasource.signup(email, pass);
   }
+
+  @override
+  Future<void> forgetPass(String email) {
+    return datasource.forgetPass(email);
+  }
 }

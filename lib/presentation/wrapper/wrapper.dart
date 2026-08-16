@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kauto/presentation/auth/provider/auth_provider.dart';
+import 'package:kauto/presentation/auth/sceen/login.dart';
 import 'package:kauto/presentation/products/screens/home.dart';
-import 'package:kauto/presentation/products/screens/login.dart';
 
 class Wrapper extends ConsumerWidget {
   const Wrapper({super.key});

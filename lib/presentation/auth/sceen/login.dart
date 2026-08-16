@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kauto/core/theme/apptheme.dart';
 import 'package:kauto/presentation/auth/provider/auth_provider.dart';
+import 'package:kauto/presentation/auth/sceen/forget_scree.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -170,11 +171,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           children: [
             Row(
               children: [
-                Text(
-                  'Forget Password',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.primary,
+                GestureDetector(
+                  onTap: () => Navigator.push(context,MaterialPageRoute(builder: (_)=>ForgetScree())),
+                  child: Text(
+                    'Forget Password',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.primary,
+                    ),
                   ),
                 ),
                 IconButton(

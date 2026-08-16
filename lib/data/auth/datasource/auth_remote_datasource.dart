@@ -52,4 +52,12 @@ class AuthRemoteDatasource {
       throw Exception('Erorr $e');
     }
   }
+
+  forgetPass(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      throw Exception('Erorr $e');
+    }
+  }
 }
