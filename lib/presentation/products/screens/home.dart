@@ -194,22 +194,120 @@ class _HomeState extends ConsumerState<Home> {
                   ),
                 ),
                 SizedBox(height: 10),
-                GridView.builder(
-                  itemCount: product.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 8.0,
-                    mainAxisSpacing: 8.0,
+                Expanded(
+                  child: GridView.builder(
+                    itemCount: product.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 8.0,
+                      mainAxisSpacing: 8.0,
+                      childAspectRatio: 0.59,
+                    ),
+                    itemBuilder: ((context, index) {
+                      return Container(
+                        padding: EdgeInsets.all(10),
+                        margin: EdgeInsets.only(bottom: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 150,
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade100,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Stack(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadiusGeometry.circular(
+                                      20,
+                                    ),
+                                    child: AspectRatio(
+                                      aspectRatio: 1.3,
+                                      child: Image.network(
+                                        product[index].thumbnail,
+
+                                        width: double.infinity,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 5,
+                                    right: 5,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade100,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(Icons.favorite_outline),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 6),
+                            Text(
+                              product[index].title,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                            SizedBox(height: 2),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.star,
+                                  color: Colors.yellow,
+                                  size: 16,
+                                ),
+                                SizedBox(width: 5),
+                                Text(
+                                  product[index].rating.toString(),
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '\$ ${product[index].price}',
+                                  style: TextStyle(
+                                    color: AppTheme.primary,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                IconButton(
+                                  padding: EdgeInsets.zero,
+                                  constraints: BoxConstraints(),
+                                  onPressed: () {},
+                                  icon: CircleAvatar(
+                                    radius: 20,
+                                    backgroundColor: AppTheme.secondary,
+                                    child: Icon(
+                                      Icons.add,
+                                      color: AppTheme.primary,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
                   ),
-                  itemBuilder: ((context, index) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        
-                      ),
-                    );
-                  }),
                 ),
               ],
             ),

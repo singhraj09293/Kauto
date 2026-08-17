@@ -8,7 +8,7 @@ class Product {
   final double price;
   final double rating;
   final int stock;
-  final String brand;
+  final String? brand;
   final List<String> images;
   final String thumbnail;
 
@@ -20,9 +20,8 @@ class Product {
     required this.price,
     required this.rating,
     required this.stock,
-    required this.brand,
+    this.brand,
     required this.images,
     required this.thumbnail,
   });
-
 }

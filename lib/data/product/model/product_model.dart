@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:kauto/domain/product/product.dart';
 
 class ProductModel extends Product {
@@ -10,7 +9,7 @@ class ProductModel extends Product {
     required super.price,
     required super.rating,
     required super.stock,
-    required super.brand,
+     super.brand,
     required super.images,
     required super.thumbnail,
   });
@@ -60,7 +59,7 @@ class ProductModel extends Product {
     price: (json["price"] as num).toDouble(),
     rating: json["rating"]?.toDouble(),
     stock: json["stock"],
-    brand: json["brand"],
+    brand: json["brand"] as String?,
     images: List<String>.from(json["images"].map((x) => x)),
     thumbnail: json["thumbnail"],
   );
