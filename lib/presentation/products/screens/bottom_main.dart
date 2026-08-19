@@ -66,13 +66,17 @@ class _BottomMainState extends State<BottomMain> {
           children: [
             navItem(0, Icons.home, Icons.home_filled, 'Home'),
             navItem(1, Icons.search_outlined, Icons.search, 'Search'),
-            navItem(2, Icons.favorite_outline, Icons.favorite, 'whishlist'),
-            
             navItem(
-              3,
+              2,
               Icons.shopping_cart_outlined,
               Icons.shopping_cart,
               'Cart',
+            ),
+
+            navItem(
+              3,
+              Icons.favorite_outline, Icons.favorite,
+              'WishList',
             ),
             navItem(4, Icons.person_outline, Icons.person, 'Profile'),
           ],

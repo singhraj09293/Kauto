@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kauto/core/theme/apptheme.dart';
+import 'package:kauto/presentation/products/providers/cart_provider.dart';
 import 'package:kauto/presentation/products/providers/product_provider.dart';
+import 'package:kauto/presentation/products/providers/wishlist_provider.dart';
 
 class Home extends ConsumerStatefulWidget {
   const Home({super.key});
@@ -13,6 +15,16 @@ class Home extends ConsumerStatefulWidget {
 class _HomeState extends ConsumerState<Home> {
   @override
   Widget build(BuildContext context) {
+    final wishAsync = ref.watch(wishlistProvider);
+    final wishedProduct = wishAsync.maybeWhen(
+      data: (wisheItems) => wisheItems.map((e) => e.productId).toSet(),
+      orElse: () => <int>{},
+    );
+    final cartAsync = ref.watch(cartProvider);
+    final addedProductIds = cartAsync.maybeWhen(
+      data: (cartItems) => cartItems.map((e) => e.productId).toSet(),
+      orElse: () => <int>{},
+    );
     final productAsync = ref.watch(productProvider);
     return productAsync.when(
       data: (product) {
@@ -45,9 +57,9 @@ class _HomeState extends ConsumerState<Home> {
                       borderSide: BorderSide.none,
                     ),
                     filled: true,
-                    fillColor: Colors.grey.shade100,
+                    fillColor: Colors.grey.shade200,
                     hintText: 'Search products..',
-                    hintStyle: TextStyle(color: Colors.grey.shade500),
+                    hintStyle: TextStyle(color: Colors.grey.shade600),
                     prefixIcon: Icon(Icons.search, color: Colors.black),
                   ),
                 ),
@@ -230,7 +242,6 @@ class _HomeState extends ConsumerState<Home> {
                                       aspectRatio: 1.3,
                                       child: Image.network(
                                         product[index].thumbnail,
-
                                         width: double.infinity,
                                         fit: BoxFit.cover,
                                       ),
@@ -245,8 +256,60 @@ class _HomeState extends ConsumerState<Home> {
                                         shape: BoxShape.circle,
                                       ),
                                       child: IconButton(
-                                        onPressed: () {},
-                                        icon: Icon(Icons.favorite_outline),
+                                        onPressed: () {
+                                          final isWished = wishedProduct
+                                              .contains(product[index].id);
+                                          if (isWished) {
+                                            ref
+                                                .read(
+                                                  wishlistRepositoryProvider,
+                                                )
+                                                .removeWhishList(
+                                                  userId: ref.read(
+                                                    userProvider,
+                                                  ),
+                                                  productId: product[index].id,
+                                                );
+                                            setState(
+                                              () => wishedProduct.remove(
+                                                product[index].id,
+                                              ),
+                                            );
+                                          } else {
+                                            ref
+                                                .read(
+                                                  wishlistRepositoryProvider,
+                                                )
+                                                .addToWhishList(
+                                                  userId: ref.read(
+                                                    userProvider,
+                                                  ),
+                                                  productId: product[index].id,
+                                                  title: product[index].title,
+                                                  price: product[index].price,
+                                                  thumbnail:
+                                                      product[index].thumbnail,
+                                                );
+                                            setState(() {
+                                              wishedProduct.add(
+                                                product[index].id,
+                                              );
+                                            });
+                                          }
+                                        },
+                                        icon: Icon(
+                                          wishedProduct.contains(
+                                                product[index].id,
+                                              )
+                                              ? Icons.favorite
+                                              : Icons.favorite_outline,
+                                          color:
+                                              wishedProduct.contains(
+                                                product[index].id,
+                                              )
+                                              ? Colors.red
+                                              : Colors.grey,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -291,12 +354,51 @@ class _HomeState extends ConsumerState<Home> {
                                 IconButton(
                                   padding: EdgeInsets.zero,
                                   constraints: BoxConstraints(),
-                                  onPressed: () {},
-                                  icon: CircleAvatar(
-                                    radius: 20,
-                                    backgroundColor: AppTheme.secondary,
+                                  onPressed: () {
+                                    final isCarted = addedProductIds.contains(
+                                      product[index].id,
+                                    );
+                                    if (isCarted) {
+                                      ref
+                                          .read(cartRepositoryProvider)
+                                          .removeFromCart(
+                                            userId: ref.read(userProvider),
+                                            productId: product[index].id,
+                                          );
+                                      setState(() {
+                                        addedProductIds.remove(
+                                          product[index].id,
+                                        );
+                                      });
+                                    } else {
+                                      ref
+                                          .read(cartRepositoryProvider)
+                                          .addToCart(
+                                            userId: ref.read(userProvider),
+                                            productId: product[index].id,
+                                            title: product[index].title,
+                                            price: product[index].price,
+                                            thumbnail: product[index].thumbnail,
+                                          );
+                                      setState(() {
+                                        addedProductIds.add(product[index].id);
+                                      });
+                                    }
+                                  },
+                                  icon: AnimatedContainer(
+                                    duration: Duration(milliseconds: 100),
+                                    curve: Curves.linear,
+                                    padding: EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: AppTheme.secondary,
+                                    ),
                                     child: Icon(
-                                      Icons.add,
+                                      addedProductIds.contains(
+                                            product[index].id,
+                                          )
+                                          ? Icons.check
+                                          : Icons.add,
                                       color: AppTheme.primary,
                                     ),
                                   ),
