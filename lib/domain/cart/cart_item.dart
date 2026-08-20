@@ -7,6 +7,7 @@ class CartItem {
   final double price;
   final String thumbnail;
   final int quantity;
+  final String desc;
 
   CartItem({
     required this.productId,
@@ -14,6 +15,7 @@ class CartItem {
     required this.price,
     required this.thumbnail,
     required this.quantity,
+    required this.desc,
   });
 
   CartItem copyWith({
@@ -22,6 +24,7 @@ class CartItem {
     double? price,
     String? thumbnail,
     int? quantity,
+    String? desc,
   }) {
     return CartItem(
       productId: productId ?? this.productId,
@@ -29,6 +32,7 @@ class CartItem {
       price: price ?? this.price,
       thumbnail: thumbnail ?? this.thumbnail,
       quantity: quantity ?? this.quantity,
+      desc: desc ?? this.desc,
     );
   }
 
@@ -39,6 +43,7 @@ class CartItem {
       'price': price,
       'thumbnail': thumbnail,
       'quantity': quantity,
+      'desc': desc,
     };
   }
 
@@ -49,6 +54,7 @@ class CartItem {
       price: (map['price'] as num).toDouble(),
       thumbnail: map['thumbnail'] as String,
       quantity: map['quantity'] as int,
+      desc: map['desc'] as String? ?? '',
     );
   }
 
@@ -59,7 +65,7 @@ class CartItem {
 
   @override
   String toString() {
-    return 'CartItem(productId: $productId, title: $title, price: $price, thumbnail: $thumbnail, quantity: $quantity)';
+    return 'CartItem(productId: $productId, title: $title, price: $price, thumbnail: $thumbnail, quantity: $quantity,desc:$desc)';
   }
 
   @override

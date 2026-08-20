@@ -9,6 +9,7 @@ class CartDataSources {
     required String title,
     required double price,
     required String thumbnail,
+    required String desc,
   }) async {
     final docId = '${userId}_$productId';
     final docRef = firestore.collection('cart').doc(docId);
@@ -23,6 +24,7 @@ class CartDataSources {
         'title': title,
         'price': price,
         'thumbnail': thumbnail,
+        'desc': desc,
       });
     }
   }

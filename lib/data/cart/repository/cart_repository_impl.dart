@@ -14,6 +14,7 @@ class CartRepositoryImpl implements CartRepository {
     required String title,
     required double price,
     required String thumbnail,
+    required String desc,
   }) async {
     return await dataSources.addToCart(
       userId: userId,
@@ -21,6 +22,7 @@ class CartRepositoryImpl implements CartRepository {
       title: title,
       price: price,
       thumbnail: thumbnail,
+      desc: desc,
     );
   }
 

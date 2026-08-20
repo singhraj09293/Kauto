@@ -379,6 +379,7 @@ class _HomeState extends ConsumerState<Home> {
                                             title: product[index].title,
                                             price: product[index].price,
                                             thumbnail: product[index].thumbnail,
+                                            desc: product[index].description,
                                           );
                                       setState(() {
                                         addedProductIds.add(product[index].id);

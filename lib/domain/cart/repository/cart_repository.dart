@@ -8,6 +8,7 @@ abstract class CartRepository {
     required String title,
     required double price,
     required String thumbnail,
+    required String desc,
   });
   Future<void> removeFromCart({required String userId, required int productId});
 }
