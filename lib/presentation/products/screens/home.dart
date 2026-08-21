@@ -4,6 +4,7 @@ import 'package:kauto/core/theme/apptheme.dart';
 import 'package:kauto/presentation/products/providers/cart_provider.dart';
 import 'package:kauto/presentation/products/providers/product_provider.dart';
 import 'package:kauto/presentation/products/providers/wishlist_provider.dart';
+import 'package:kauto/presentation/products/screens/detail.dart';
 
 class Home extends ConsumerStatefulWidget {
   const Home({super.key});
@@ -216,197 +217,210 @@ class _HomeState extends ConsumerState<Home> {
                       childAspectRatio: 0.59,
                     ),
                     itemBuilder: ((context, index) {
-                      return Container(
-                        padding: EdgeInsets.all(10),
-                        margin: EdgeInsets.only(bottom: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
+                      return GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => Detail(product: product[index]),
+                          ),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 150,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade100,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadiusGeometry.circular(
-                                      20,
-                                    ),
-                                    child: AspectRatio(
-                                      aspectRatio: 1.3,
-                                      child: Image.network(
-                                        product[index].thumbnail,
-                                        width: double.infinity,
-                                        fit: BoxFit.cover,
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          margin: EdgeInsets.only(bottom: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 150,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade100,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius:
+                                          BorderRadiusGeometry.circular(20),
+                                      child: AspectRatio(
+                                        aspectRatio: 1.3,
+                                        child: Image.network(
+                                          product[index].thumbnail,
+                                          width: double.infinity,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
+                                    ),
+                                    Positioned(
+                                      top: 5,
+                                      right: 5,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey.shade100,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: IconButton(
+                                          onPressed: () {
+                                            final isWished = wishedProduct
+                                                .contains(product[index].id);
+                                            if (isWished) {
+                                              ref
+                                                  .read(
+                                                    wishlistRepositoryProvider,
+                                                  )
+                                                  .removeWhishList(
+                                                    userId: ref.read(
+                                                      userProvider,
+                                                    ),
+                                                    productId:
+                                                        product[index].id,
+                                                  );
+                                              setState(
+                                                () => wishedProduct.remove(
+                                                  product[index].id,
+                                                ),
+                                              );
+                                            } else {
+                                              ref
+                                                  .read(
+                                                    wishlistRepositoryProvider,
+                                                  )
+                                                  .addToWhishList(
+                                                    userId: ref.read(
+                                                      userProvider,
+                                                    ),
+                                                    productId:
+                                                        product[index].id,
+                                                    title: product[index].title,
+                                                    price: product[index].price,
+                                                    thumbnail: product[index]
+                                                        .thumbnail,
+                                                  );
+                                              setState(() {
+                                                wishedProduct.add(
+                                                  product[index].id,
+                                                );
+                                              });
+                                            }
+                                          },
+                                          icon: Icon(
+                                            wishedProduct.contains(
+                                                  product[index].id,
+                                                )
+                                                ? Icons.favorite
+                                                : Icons.favorite_outline,
+                                            color:
+                                                wishedProduct.contains(
+                                                  product[index].id,
+                                                )
+                                                ? Colors.red
+                                                : Colors.grey,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 6),
+                              Text(
+                                product[index].title,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
+                              ),
+                              SizedBox(height: 2),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.yellow,
+                                    size: 16,
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    product[index].rating.toString(),
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '\$ ${product[index].price}',
+                                    style: TextStyle(
+                                      color: AppTheme.primary,
+                                      fontSize: 18,
                                     ),
                                   ),
-                                  Positioned(
-                                    top: 5,
-                                    right: 5,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.shade100,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: IconButton(
-                                        onPressed: () {
-                                          final isWished = wishedProduct
-                                              .contains(product[index].id);
-                                          if (isWished) {
-                                            ref
-                                                .read(
-                                                  wishlistRepositoryProvider,
-                                                )
-                                                .removeWhishList(
-                                                  userId: ref.read(
-                                                    userProvider,
-                                                  ),
-                                                  productId: product[index].id,
-                                                );
-                                            setState(
-                                              () => wishedProduct.remove(
-                                                product[index].id,
-                                              ),
+                                  IconButton(
+                                    padding: EdgeInsets.zero,
+                                    constraints: BoxConstraints(),
+                                    onPressed: () {
+                                      final isCarted = addedProductIds.contains(
+                                        product[index].id,
+                                      );
+                                      if (isCarted) {
+                                        ref
+                                            .read(cartRepositoryProvider)
+                                            .removeFromCart(
+                                              userId: ref.read(userProvider),
+                                              productId: product[index].id,
                                             );
-                                          } else {
-                                            ref
-                                                .read(
-                                                  wishlistRepositoryProvider,
-                                                )
-                                                .addToWhishList(
-                                                  userId: ref.read(
-                                                    userProvider,
-                                                  ),
-                                                  productId: product[index].id,
-                                                  title: product[index].title,
-                                                  price: product[index].price,
-                                                  thumbnail:
-                                                      product[index].thumbnail,
-                                                );
-                                            setState(() {
-                                              wishedProduct.add(
-                                                product[index].id,
-                                              );
-                                            });
-                                          }
-                                        },
-                                        icon: Icon(
-                                          wishedProduct.contains(
-                                                product[index].id,
-                                              )
-                                              ? Icons.favorite
-                                              : Icons.favorite_outline,
-                                          color:
-                                              wishedProduct.contains(
-                                                product[index].id,
-                                              )
-                                              ? Colors.red
-                                              : Colors.grey,
-                                        ),
+                                        setState(() {
+                                          addedProductIds.remove(
+                                            product[index].id,
+                                          );
+                                        });
+                                      } else {
+                                        ref
+                                            .read(cartRepositoryProvider)
+                                            .addToCart(
+                                              userId: ref.read(userProvider),
+                                              productId: product[index].id,
+                                              title: product[index].title,
+                                              price: product[index].price,
+                                              thumbnail:
+                                                  product[index].thumbnail,
+                                              desc: product[index].description,
+                                            );
+                                        setState(() {
+                                          addedProductIds.add(
+                                            product[index].id,
+                                          );
+                                        });
+                                      }
+                                    },
+                                    icon: AnimatedContainer(
+                                      duration: Duration(milliseconds: 100),
+                                      curve: Curves.linear,
+                                      padding: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: AppTheme.secondary,
+                                      ),
+                                      child: Icon(
+                                        addedProductIds.contains(
+                                              product[index].id,
+                                            )
+                                            ? Icons.check
+                                            : Icons.add,
+                                        color: AppTheme.primary,
                                       ),
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                            SizedBox(height: 6),
-                            Text(
-                              product[index].title,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13,
-                              ),
-                            ),
-                            SizedBox(height: 2),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.star,
-                                  color: Colors.yellow,
-                                  size: 16,
-                                ),
-                                SizedBox(width: 5),
-                                Text(
-                                  product[index].rating.toString(),
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '\$ ${product[index].price}',
-                                  style: TextStyle(
-                                    color: AppTheme.primary,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                IconButton(
-                                  padding: EdgeInsets.zero,
-                                  constraints: BoxConstraints(),
-                                  onPressed: () {
-                                    final isCarted = addedProductIds.contains(
-                                      product[index].id,
-                                    );
-                                    if (isCarted) {
-                                      ref
-                                          .read(cartRepositoryProvider)
-                                          .removeFromCart(
-                                            userId: ref.read(userProvider),
-                                            productId: product[index].id,
-                                          );
-                                      setState(() {
-                                        addedProductIds.remove(
-                                          product[index].id,
-                                        );
-                                      });
-                                    } else {
-                                      ref
-                                          .read(cartRepositoryProvider)
-                                          .addToCart(
-                                            userId: ref.read(userProvider),
-                                            productId: product[index].id,
-                                            title: product[index].title,
-                                            price: product[index].price,
-                                            thumbnail: product[index].thumbnail,
-                                            desc: product[index].description,
-                                          );
-                                      setState(() {
-                                        addedProductIds.add(product[index].id);
-                                      });
-                                    }
-                                  },
-                                  icon: AnimatedContainer(
-                                    duration: Duration(milliseconds: 100),
-                                    curve: Curves.linear,
-                                    padding: EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: AppTheme.secondary,
-                                    ),
-                                    child: Icon(
-                                      addedProductIds.contains(
-                                            product[index].id,
-                                          )
-                                          ? Icons.check
-                                          : Icons.add,
-                                      color: AppTheme.primary,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       );
                     }),
