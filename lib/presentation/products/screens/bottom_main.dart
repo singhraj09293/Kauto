@@ -15,7 +15,7 @@ class BottomMain extends StatefulWidget {
 
 class _BottomMainState extends State<BottomMain> {
   int currentIndex = 0;
-  List<Widget> screens = [Home(), Search(), Cart(), Profile(), Whishlist()];
+  List<Widget> screens = [Home(), Search(), Cart(),Whishlist(), Profile(), ];
   Widget navItem(int index, IconData icon, IconData activeIcon, String label) {
     bool isActive = currentIndex == index;
     return GestureDetector(
