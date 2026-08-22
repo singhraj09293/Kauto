@@ -141,7 +141,7 @@ class _WhishlistState extends ConsumerState<Whishlist> {
                                     },
                                     child:
                                         addedProductIds.contains(wish.productId)
-                                        ? Icon(Icons.check,color: Colors.white,)
+                                        ? Center(child: Icon(Icons.check,color: Colors.white,))
                                         : Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
