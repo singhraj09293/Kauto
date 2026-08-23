@@ -103,12 +103,12 @@ class _DetailState extends ConsumerState<Detail> {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.all(10),
+                        padding: EdgeInsets.all(12),
                         decoration: BoxDecoration(
                           color: isInStock
                               ? Colors.green.shade50
                               : Colors.red.shade50,
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(20),
                         ),
                         child: Row(
                           children: [
@@ -214,6 +214,7 @@ class _DetailState extends ConsumerState<Detail> {
                     widget.product.description,
                     style: TextStyle(color: Colors.grey.shade600, fontSize: 18),
                   ),
+                  SizedBox(height: 80,)
                 ],
               ),
             ),
