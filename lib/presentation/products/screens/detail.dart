@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kauto/core/theme/apptheme.dart';
 import 'package:kauto/domain/product/product.dart';
 import 'package:kauto/presentation/products/providers/cart_provider.dart';
+import 'package:kauto/presentation/products/providers/wishlist_provider.dart';
 
 class Detail extends ConsumerStatefulWidget {
   final Product product;
@@ -16,17 +17,52 @@ class _DetailState extends ConsumerState<Detail> {
   @override
   Widget build(BuildContext context) {
     final isInStock = widget.product.stock > 0;
+    final wishAsync = ref.watch(wishlistProvider);
+    final wishedProduct = wishAsync.maybeWhen(
+      data: (wisheItems) => wisheItems.map((e) => e.productId).toSet(),
+      orElse: () => <int>{},
+    );
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
         title: Text(
-          widget.product.title,
-          style: TextStyle(color: AppTheme.primary, fontSize: 20),
+          'Detail',
+          style: TextStyle(
+            color: AppTheme.primary,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.favorite_outline_outlined),
+            onPressed: () {
+              final isWished = wishedProduct.contains(widget.product.id);
+              if (isWished) {
+                ref
+                    .read(wishlistRepositoryProvider)
+                    .removeWhishList(
+                      userId: ref.read(userProvider),
+                      productId: widget.product.id,
+                    );
+                setState(() => wishedProduct.remove(widget.product.id));
+              } else {
+                ref
+                    .read(wishlistRepositoryProvider)
+                    .addToWhishList(
+                      userId: ref.read(userProvider),
+                      productId: widget.product.id,
+                      title: widget.product.title,
+                      price: widget.product.price,
+                      thumbnail: widget.product.thumbnail,
+                    );
+                setState(() {
+                  wishedProduct.add(widget.product.id);
+                });
+              }
+            },
+            icon: wishedProduct.contains(widget.product.id)
+                ? Icon(Icons.favorite)
+                : Icon(Icons.favorite_outline_outlined),
           ),
           IconButton(onPressed: () {}, icon: Icon(Icons.share)),
         ],
@@ -44,7 +80,7 @@ class _DetailState extends ConsumerState<Detail> {
               ),
             ),
             Container(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30),
@@ -59,7 +95,7 @@ class _DetailState extends ConsumerState<Detail> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        widget.product.brand.toString(),
+                        widget.product.brand ?? '',
                         style: TextStyle(
                           color: Colors.grey,
                           letterSpacing: 2,
@@ -94,12 +130,12 @@ class _DetailState extends ConsumerState<Detail> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 3),
                   Text(
                     widget.product.title,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 5),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -110,7 +146,7 @@ class _DetailState extends ConsumerState<Detail> {
                               return Icon(Icons.star, color: Colors.amber);
                             }
                             if (i == widget.product.rating.floor() &&
-                                widget.product.rating >= 0.5) {
+                                widget.product.rating % 1 >= 0.5) {
                               return Icon(Icons.star_half, color: Colors.amber);
                             } else {
                               return Icon(
@@ -134,7 +170,7 @@ class _DetailState extends ConsumerState<Detail> {
                         '\$${widget.product.price.toStringAsFixed(2)}',
                         style: TextStyle(
                           color: AppTheme.primary,
-                          fontSize: 25,
+                          fontSize: 28,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -147,7 +183,7 @@ class _DetailState extends ConsumerState<Detail> {
                   ),
                   SizedBox(height: 10),
                   SizedBox(
-                    height: 80,
+                    height: 120,
                     child: ListView.builder(
                       itemCount: widget.product.images.length,
                       scrollDirection: Axis.horizontal,
@@ -161,14 +197,14 @@ class _DetailState extends ConsumerState<Detail> {
                           ),
                           child: Image.network(
                             widget.product.images[index],
-                            height: 80,
-                            width: 80,
+                            height: 120,
+                            width: 120,
                           ),
                         );
                       },
                     ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 20),
                   Text(
                     'Product Description',
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
@@ -178,43 +214,45 @@ class _DetailState extends ConsumerState<Detail> {
                     widget.product.description,
                     style: TextStyle(color: Colors.grey.shade600, fontSize: 18),
                   ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.primary,
-                      fixedSize: Size(360, 55),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadiusGeometry.circular(10),
-                      ),
-                    ),
-                    onPressed: () {
-                      ref
-                          .read(cartRepositoryProvider)
-                          .addToCart(
-                            userId: ref.read(userProvider),
-                            productId: widget.product.id,
-                            title: widget.product.title,
-                            price: widget.product.price,
-                            thumbnail: widget.product.thumbnail,
-                            desc: widget.product.description,
-                          );
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.shopping_bag_outlined, color: Colors.white),
-                        SizedBox(width: 10),
-                        Text(
-                          'Add to Cart',
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ),
-                      ],
-                    ),
-                  ),
                 ],
               ),
             ),
           ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppTheme.primary,
+            fixedSize: Size(360, 55),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadiusGeometry.circular(10),
+            ),
+          ),
+          onPressed: () {
+            ref
+                .read(cartRepositoryProvider)
+                .addToCart(
+                  userId: ref.read(userProvider),
+                  productId: widget.product.id,
+                  title: widget.product.title,
+                  price: widget.product.price,
+                  thumbnail: widget.product.thumbnail,
+                  desc: widget.product.description,
+                );
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.shopping_bag_outlined, color: Colors.white),
+              SizedBox(width: 10),
+              Text(
+                'Add to Cart',
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              ),
+            ],
+          ),
         ),
       ),
     );
