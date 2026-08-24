@@ -20,8 +20,8 @@ class RecentSearchProvider extends StateNotifier<List<String>> {
     await pref.setStringList('recent_search', state);
   }
 
-  removeSearch(String text) async {
-    state = state.where((e) => e != text).toList();
+  clearAll() async {
+    state = [];
     final pref = await SharedPreferences.getInstance();
     await pref.setStringList('recent_search', state);
   }
