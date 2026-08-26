@@ -8,6 +8,7 @@ import 'package:kauto/presentation/products/providers/cart_provider.dart';
 import 'package:kauto/presentation/products/providers/product_provider.dart';
 import 'package:kauto/presentation/products/providers/recent_search_provider.dart';
 import 'package:kauto/presentation/products/providers/wishlist_provider.dart';
+import 'package:kauto/presentation/products/screens/detail.dart';
 
 class Search extends ConsumerStatefulWidget {
   const Search({super.key});
@@ -77,7 +78,6 @@ class _SearchState extends ConsumerState<Search> {
               ),
               SizedBox(height: 10),
               Row(
-                
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
@@ -97,46 +97,36 @@ class _SearchState extends ConsumerState<Search> {
               ),
               SizedBox(height: 10),
 
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: searchProvider.map((search) {
-                    return GestureDetector(
-                      onTap: () {
-                        searchProduct.text = search;
-                        searchProduct.selection = TextSelection.fromPosition(
-                          TextPosition(offset: search.length),
-                        );
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(left: 10),
-                        padding: EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.shade200,
-                              blurRadius: 10,
-                              spreadRadius: 3,
-                              offset: Offset(0, 0),
-                            ),
-                          ],
+              Align(
+                alignment: Alignment.centerLeft,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: searchProvider.map((search) {
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: ActionChip(
+                          avatar: const Icon(Icons.history, size: 18),
+                          label: Text(
+                            search,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          onPressed: () {
+                            searchProduct.text = search;
+                            searchProduct.selection = TextSelection.fromPosition(
+                              TextPosition(offset: search.length),
+                            );
+                          },
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          backgroundColor: Colors.white,
+                          elevation: 2,
                         ),
-                        child: Row(
-                       
-                          children: [
-                            Icon(Icons.history),
-                            SizedBox(width: 10),
-                            Text(
-                              search,
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }).toList(),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
               SizedBox(height: 30),
@@ -274,9 +264,7 @@ class _SearchResultState extends ConsumerState<SearchResult> {
               (e) => e.title.toLowerCase().contains(widget.query.toLowerCase()),
             )
             .toList();
-        print(
-          'query: "${widget.query}", productCount: ${product.length}, results: ${result.length}',
-        );
+        
         if (result.isEmpty) {
           return Center(
             child: Column(
@@ -304,120 +292,133 @@ class _SearchResultState extends ConsumerState<SearchResult> {
               itemCount: result.length,
               itemBuilder: (context, index) {
                 final pro = result[index];
-                return Container(
-                  margin: EdgeInsets.only(bottom: 10),
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.shade200,
-                        blurRadius: 10,
-                        spreadRadius: 3,
-                        offset: Offset(0, 0),
-                      ),
-                    ],
+                return GestureDetector(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => Detail(product: pro)),
                   ),
-                  child: Row(
-                    children: [
-                      Container(
-                        height: 130,
-                        width: 110,
-                        decoration: BoxDecoration(color: Colors.grey.shade50),
-                        child: Image.network(pro.thumbnail, fit: BoxFit.cover),
-                      ),
-                      SizedBox(width: 20),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            pro.brand ?? '',
-                            style: TextStyle(
-                              color: Colors.grey,
-                              letterSpacing: 1.5,
-                              fontSize: 15,
-                            ),
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 10),
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.shade200,
+                          blurRadius: 10,
+                          spreadRadius: 3,
+                          offset: Offset(0, 0),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          height: 130,
+                          width: 110,
+                          decoration: BoxDecoration(color: Colors.grey.shade50),
+                          child: Image.network(
+                            pro.thumbnail,
+                            fit: BoxFit.cover,
                           ),
-                          SizedBox(height: 5),
-                          Text(
-                            pro.title,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Row(
+                        ),
+                        SizedBox(width: 20),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Icon(Icons.star, color: Colors.amber),
-                              SizedBox(width: 5),
                               Text(
-                                pro.rating.toString(),
+                                pro.brand ?? '',
                                 style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey,
+                                  letterSpacing: 1.5,
                                   fontSize: 15,
                                 ),
                               ),
-                            ],
-                          ),
-                          SizedBox(height: 5,),
-                          Row(
-                            children: [
+                              SizedBox(height: 5),
                               Text(
-                                '\$${pro.price}',
+                                pro.title,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                  color: AppTheme.outlinedText,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
                                 ),
                               ),
-                              SizedBox(width: 80),
-                              CircleAvatar(
-                                backgroundColor: AppTheme.primary.withValues(
-                                  alpha: 0.1,
-                                ),
-                                child: IconButton(
-                                  onPressed: () {
-                                    final isWished = wishedProduct.contains(
-                                      pro.id,
-                                    );
-                                    if (isWished) {
-                                      ref
-                                          .read(wishlistRepositoryProvider)
-                                          .removeWhishList(
-                                            userId: ref.read(userProvider),
-                                            productId: pro.id,
-                                          );
-                                    } else {
-                                      ref
-                                          .read(wishlistRepositoryProvider)
-                                          .addToWhishList(
-                                            userId: ref.read(userProvider),
-                                            productId: pro.id,
-                                            title: pro.title,
-                                            price: pro.price,
-                                            thumbnail: pro.thumbnail,
-                                          );
-                                    }
-                                  },
-                                  icon: Icon(
-                                    wishedProduct.contains(pro.id)
-                                        ? Icons.favorite
-                                        : Icons.favorite_outline,
-                                    color: wishedProduct.contains(pro.id)
-                                        ? Colors.red
-                                        : Colors.grey,
+                              SizedBox(height: 5),
+                              Row(
+                                children: [
+                                  Icon(Icons.star, color: Colors.amber),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    pro.rating.toString(),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                    ),
                                   ),
-                                ),
+                                ],
+                              ),
+                              SizedBox(height: 5),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Text(
+                                    '\$${pro.price}',
+                                    style: TextStyle(
+                                      color: AppTheme.outlinedText,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+
+                                  CircleAvatar(
+                                    backgroundColor: AppTheme.primary
+                                        .withValues(alpha: 0.1),
+                                    child: IconButton(
+                                      onPressed: () {
+                                        final isWished = wishedProduct.contains(
+                                          pro.id,
+                                        );
+                                        if (isWished) {
+                                          ref
+                                              .read(wishlistRepositoryProvider)
+                                              .removeWhishList(
+                                                userId: ref.read(userProvider),
+                                                productId: pro.id,
+                                              );
+                                        } else {
+                                          ref
+                                              .read(wishlistRepositoryProvider)
+                                              .addToWhishList(
+                                                userId: ref.read(userProvider),
+                                                productId: pro.id,
+                                                title: pro.title,
+                                                price: pro.price,
+                                                thumbnail: pro.thumbnail,
+                                              );
+                                        }
+                                      },
+                                      icon: Icon(
+                                        wishedProduct.contains(pro.id)
+                                            ? Icons.favorite
+                                            : Icons.favorite_outline,
+                                        color: wishedProduct.contains(pro.id)
+                                            ? Colors.red
+                                            : Colors.grey,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
