@@ -7,7 +7,7 @@ import 'package:riverpod/riverpod.dart';
 final addRepositoryProvider = Provider(
   (ref) => AddRepositoryImp(addDataSource: Datasources()),
 );
-final addRepository = StreamProvider<List<Address>>((ref) {
+final addProvider = StreamProvider<List<Address>>((ref) {
   final repository = ref.watch(addRepositoryProvider);
   final user = ref.watch(userProvider);
   return repository.getAdd(userId: user);

@@ -19,7 +19,7 @@ class AddModel extends Address {
     String? add2,
     String? city,
     String? state,
-    int? pincode,
+    String? pincode,
   }) {
     return AddModel(
       name: name ?? this.name,
@@ -46,13 +46,13 @@ class AddModel extends Address {
 
   factory AddModel.fromMap(Map<String, dynamic> map) {
     return AddModel(
-      name: map['name'] as String,
-      phone: map['phone'] as String,
-      add1: map['add1'] as String,
-      add2: map['add2'] as String,
-      city: map['city'] as String,
-      state: map['state'] as String,
-      pincode: map['pincode'] as int,
+      name: map['name'] as String? ?? '',
+      phone: map['phone'] as String? ?? '',
+      add1: map['address1'] as String? ?? '',
+      city: map['city'] as String? ?? '',
+      state: map['state'] as String? ?? '',
+      pincode: map['pincode'] as String? ?? '',
+      add2: map['address2'] as String? ?? '',
     );
   }
 

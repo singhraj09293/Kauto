@@ -8,7 +8,7 @@ class Address {
   final String add2;
   final String city;
   final String state;
-  final int pincode;
+  final String pincode;
 
   Address({
     required this.name,
