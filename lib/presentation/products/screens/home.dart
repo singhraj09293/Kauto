@@ -16,6 +16,7 @@ class Home extends ConsumerStatefulWidget {
 }
 
 class _HomeState extends ConsumerState<Home> {
+  String category = '';
   late final TextEditingController searchProduct;
   @override
   void initState() {
