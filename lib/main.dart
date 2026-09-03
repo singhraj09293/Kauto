@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:kauto/firebase_options.dart';
 import 'package:kauto/presentation/products/providers/theme_provider.dart';
 import 'package:kauto/presentation/wrapper/wrapper.dart';
@@ -22,6 +23,7 @@ class MyApp extends ConsumerWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Color(0xffF5F5FA),
         appBarTheme: AppBarTheme(backgroundColor: Color(0xffF5F5FA)),
+        textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
       ),
       darkTheme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Color(0xFF121212),
