@@ -26,7 +26,11 @@ class _WhishlistState extends ConsumerState<Whishlist> {
           appBar: AppBar(
             title: Text(
               'WishList',
-              style: TextStyle(color: AppTheme.primary, fontSize: 25),
+              style: TextStyle(
+                color: AppTheme.primary,
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           body: Padding(
@@ -83,22 +87,30 @@ class _WhishlistState extends ConsumerState<Whishlist> {
                               padding: EdgeInsets.all(15),
                               margin: EdgeInsets.only(bottom: 10),
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(20),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.shade200,
-                                    blurRadius: 8,
-                                    spreadRadius: 2,
-                                    offset: Offset(0, 4),
-                                  ),
-                                ],
+                                boxShadow:
+                                    Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? []
+                                    : [
+                                        BoxShadow(
+                                          color: Colors.grey.shade200,
+                                          blurRadius: 8,
+                                          spreadRadius: 2,
+                                          offset: Offset(0, 4),
+                                        ),
+                                      ],
                               ),
                               child: Row(
                                 children: [
                                   Container(
                                     decoration: BoxDecoration(
-                                      color: Colors.grey.shade100,
+                                      color:
+                                          Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? Colors.grey.shade50
+                                          : Colors.grey.shade100,
                                     ),
                                     child: Image.network(
                                       wish.thumbnail,

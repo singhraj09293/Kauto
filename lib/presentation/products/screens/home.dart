@@ -16,7 +16,7 @@ class Home extends ConsumerStatefulWidget {
 }
 
 class _HomeState extends ConsumerState<Home> {
-  String category = '';
+  String selectedCategory = '';
   late final TextEditingController searchProduct;
   @override
   void initState() {
@@ -46,8 +46,14 @@ class _HomeState extends ConsumerState<Home> {
       orElse: () => <int>{},
     );
     final productAsync = ref.watch(productProvider);
+
     return productAsync.when(
       data: (product) {
+        final filtered = selectedCategory.isEmpty
+            ? product
+            : product
+                  .where((p) => p.category.toLowerCase() == selectedCategory)
+                  .toList();
         return Scaffold(
           appBar: AppBar(
             title: Text(
@@ -83,10 +89,19 @@ class _HomeState extends ConsumerState<Home> {
                       borderSide: BorderSide.none,
                     ),
                     filled: true,
-                    fillColor: Colors.grey.shade200,
+                    fillColor: Theme.of(context).cardColor,
                     hintText: 'Search products..',
-                    hintStyle: TextStyle(color: Colors.grey.shade600),
-                    prefixIcon: Icon(Icons.search, color: Colors.black),
+                    hintStyle: TextStyle(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.grey.shade500
+                          : Colors.grey.shade600,
+                    ),
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Colors.black,
+                    ),
                   ),
                 ),
                 SizedBox(height: 20),
@@ -110,131 +125,155 @@ class _HomeState extends ConsumerState<Home> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Column(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.all(20),
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey.shade100,
-                                          shape: BoxShape.circle,
+                                  GestureDetector(
+                                    onDoubleTap: () {
+                                      setState(() {
+                                        selectedCategory = '';
+                                      });
+                                    },
+                                    onTap: () => setState(() {
+                                      selectedCategory = 'fragrances';
+                                    }),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.all(20),
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context).cardColor,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Icon(
+                                            Icons.spa,
+                                            color: AppTheme.primary,
+                                            size: 30,
+                                          ),
                                         ),
-                                        child: Icon(
-                                          Icons.devices,
-                                          color: AppTheme.primary,
-                                          size: 35,
+                                        Text(
+                                          'Fragrances',
+                                          style: TextStyle(
+                                            color: Colors.grey.shade500,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        'Electronics',
-                                        style: TextStyle(
-                                          color: Colors.grey.shade500,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(width: 30),
-                                  Column(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.all(20),
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey.shade100,
-                                          shape: BoxShape.circle,
+                                  GestureDetector(
+                                    onDoubleTap: () {
+                                      setState(() {
+                                        selectedCategory = '';
+                                      });
+                                    },
+                                    onTap: () {
+                                      setState(() {
+                                        selectedCategory = 'furniture';
+                                      });
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.all(20),
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context).cardColor,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Icon(
+                                            Icons.chair,
+                                            color: AppTheme.primary,
+                                            size: 30,
+                                          ),
                                         ),
-                                        child: Icon(
-                                          Icons.checkroom,
-                                          color: AppTheme.primary,
-                                          size: 30,
+                                        Text(
+                                          'Furniture',
+                                          style: TextStyle(
+                                            color: Colors.grey.shade500,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        'Fashion',
-                                        style: TextStyle(
-                                          color: Colors.grey.shade500,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(width: 30),
-                                  Column(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.all(20),
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey.shade100,
-                                          shape: BoxShape.circle,
+                                  GestureDetector(
+                                    onDoubleTap: () {
+                                      setState(() {
+                                        selectedCategory = '';
+                                      });
+                                    },
+                                    onTap: () {
+                                      setState(() {
+                                        selectedCategory = 'beauty';
+                                      });
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.all(20),
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context).cardColor,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Icon(
+                                            Icons.face_retouching_natural,
+                                            color: AppTheme.primary,
+                                            size: 30,
+                                          ),
                                         ),
-                                        child: Icon(
-                                          Icons.chair,
-                                          color: AppTheme.primary,
-                                          size: 30,
+                                        Text(
+                                          'Beauty',
+                                          style: TextStyle(
+                                            color: Colors.grey.shade500,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        'Home',
-                                        style: TextStyle(
-                                          color: Colors.grey.shade500,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(width: 30),
-                                  Column(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.all(20),
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey.shade100,
-                                          shape: BoxShape.circle,
+                                  GestureDetector(
+                                    onDoubleTap: () {
+                                      setState(() {
+                                        selectedCategory = '';
+                                      });
+                                    },
+                                    onTap: () {
+                                      setState(() {
+                                        selectedCategory = 'groceries';
+                                      });
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.all(20),
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context).cardColor,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Icon(
+                                            Icons.local_grocery_store,
+                                            color: AppTheme.primary,
+                                            size: 30,
+                                          ),
                                         ),
-                                        child: Icon(
-                                          Icons.face_retouching_natural,
-                                          color: AppTheme.primary,
-                                          size: 30,
+                                        Text(
+                                          'Grocery',
+                                          style: TextStyle(
+                                            color: Colors.grey.shade500,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        'Beauty',
-                                        style: TextStyle(
-                                          color: Colors.grey.shade500,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(width: 30),
-                                  Column(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.all(20),
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey.shade100,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Icon(
-                                          Icons.local_grocery_store,
-                                          color: AppTheme.primary,
-                                          size: 30,
-                                        ),
-                                      ),
-                                      Text(
-                                        'Grocery',
-                                        style: TextStyle(
-                                          color: Colors.grey.shade500,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'Trending now',
+                              selectedCategory.isEmpty
+                                  ? 'Trending now'
+                                  : selectedCategory,
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 20,
@@ -244,28 +283,29 @@ class _HomeState extends ConsumerState<Home> {
                             SizedBox(height: 10),
                             Expanded(
                               child: GridView.builder(
-                                itemCount: product.length,
+                                itemCount: filtered.length,
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 2,
                                       crossAxisSpacing: 8.0,
                                       mainAxisSpacing: 8.0,
-                                      childAspectRatio: 0.59,
+                                      childAspectRatio: 0.62,
                                     ),
                                 itemBuilder: ((context, index) {
+                                  final products = filtered[index];
                                   return GestureDetector(
                                     onTap: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (_) =>
-                                            Detail(product: product[index]),
+                                            Detail(product: filtered[index]),
                                       ),
                                     ),
                                     child: Container(
                                       padding: EdgeInsets.all(10),
                                       margin: EdgeInsets.only(bottom: 10),
                                       decoration: BoxDecoration(
-                                        color: Colors.white,
+                                        color: Theme.of(context).cardColor,
                                         borderRadius: BorderRadius.circular(20),
                                       ),
                                       child: Column(
@@ -273,9 +313,15 @@ class _HomeState extends ConsumerState<Home> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Container(
-                                            height: 150,
+                                            height: 130,
                                             decoration: BoxDecoration(
-                                              color: Colors.grey.shade100,
+                                              color:
+                                                  Theme.of(
+                                                        context,
+                                                      ).brightness ==
+                                                      Brightness.dark
+                                                  ? Colors.grey.shade500
+                                                  : Colors.grey.shade100,
                                               borderRadius:
                                                   BorderRadius.circular(20),
                                             ),
@@ -286,13 +332,11 @@ class _HomeState extends ConsumerState<Home> {
                                                       BorderRadiusGeometry.circular(
                                                         20,
                                                       ),
-                                                  child: AspectRatio(
-                                                    aspectRatio: 1.3,
-                                                    child: Image.network(
-                                                      product[index].thumbnail,
-                                                      width: double.infinity,
-                                                      fit: BoxFit.cover,
-                                                    ),
+                                                  child: Image.network(
+                                                    products.thumbnail,
+                                                    width: double.infinity,
+                                                    height: 130,
+                                                    fit: BoxFit.cover,
                                                   ),
                                                 ),
                                                 Positioned(
@@ -300,8 +344,9 @@ class _HomeState extends ConsumerState<Home> {
                                                   right: 5,
                                                   child: Container(
                                                     decoration: BoxDecoration(
-                                                      color:
-                                                          Colors.grey.shade100,
+                                                      color: Theme.of(
+                                                        context,
+                                                      ).cardColor,
                                                       shape: BoxShape.circle,
                                                     ),
                                                     child: IconButton(
@@ -309,8 +354,7 @@ class _HomeState extends ConsumerState<Home> {
                                                         final isWished =
                                                             wishedProduct
                                                                 .contains(
-                                                                  product[index]
-                                                                      .id,
+                                                                  products.id,
                                                                 );
                                                         if (isWished) {
                                                           ref
@@ -322,14 +366,12 @@ class _HomeState extends ConsumerState<Home> {
                                                                   userProvider,
                                                                 ),
                                                                 productId:
-                                                                    product[index]
-                                                                        .id,
+                                                                    products.id,
                                                               );
                                                           setState(
                                                             () => wishedProduct
                                                                 .remove(
-                                                                  product[index]
-                                                                      .id,
+                                                                  products.id,
                                                                 ),
                                                           );
                                                         } else {
@@ -342,28 +384,24 @@ class _HomeState extends ConsumerState<Home> {
                                                                   userProvider,
                                                                 ),
                                                                 productId:
-                                                                    product[index]
-                                                                        .id,
-                                                                title:
-                                                                    product[index]
-                                                                        .title,
-                                                                price:
-                                                                    product[index]
-                                                                        .price,
-                                                                thumbnail:
-                                                                    product[index]
-                                                                        .thumbnail,
+                                                                    products.id,
+                                                                title: products
+                                                                    .title,
+                                                                price: products
+                                                                    .price,
+                                                                thumbnail: products
+                                                                    .thumbnail,
                                                               );
                                                           setState(() {
                                                             wishedProduct.add(
-                                                              product[index].id,
+                                                              products.id,
                                                             );
                                                           });
                                                         }
                                                       },
                                                       icon: Icon(
                                                         wishedProduct.contains(
-                                                              product[index].id,
+                                                              products.id,
                                                             )
                                                             ? Icons.favorite
                                                             : Icons
@@ -371,8 +409,7 @@ class _HomeState extends ConsumerState<Home> {
                                                         color:
                                                             wishedProduct
                                                                 .contains(
-                                                                  product[index]
-                                                                      .id,
+                                                                  products.id,
                                                                 )
                                                             ? Colors.red
                                                             : Colors.grey,
@@ -385,7 +422,7 @@ class _HomeState extends ConsumerState<Home> {
                                           ),
                                           SizedBox(height: 6),
                                           Text(
-                                            product[index].title,
+                                            products.title,
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
@@ -403,8 +440,7 @@ class _HomeState extends ConsumerState<Home> {
                                               ),
                                               SizedBox(width: 5),
                                               Text(
-                                                product[index].rating
-                                                    .toString(),
+                                                products.rating.toString(),
                                                 style: TextStyle(fontSize: 16),
                                               ),
                                             ],
@@ -414,9 +450,10 @@ class _HomeState extends ConsumerState<Home> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                '\$ ${product[index].price}',
+                                                '\$ ${products.price}',
                                                 style: TextStyle(
                                                   color: AppTheme.primary,
+                                                  fontWeight: FontWeight.bold,
                                                   fontSize: 18,
                                                 ),
                                               ),
@@ -426,7 +463,7 @@ class _HomeState extends ConsumerState<Home> {
                                                 onPressed: () {
                                                   final isCarted =
                                                       addedProductIds.contains(
-                                                        product[index].id,
+                                                        products.id,
                                                       );
                                                   if (isCarted) {
                                                     ref
@@ -438,11 +475,11 @@ class _HomeState extends ConsumerState<Home> {
                                                             userProvider,
                                                           ),
                                                           productId:
-                                                              product[index].id,
+                                                              products.id,
                                                         );
                                                     setState(() {
                                                       addedProductIds.remove(
-                                                        product[index].id,
+                                                        products.id,
                                                       );
                                                     });
                                                   } else {
@@ -455,20 +492,17 @@ class _HomeState extends ConsumerState<Home> {
                                                             userProvider,
                                                           ),
                                                           productId:
-                                                              product[index].id,
-                                                          title: product[index]
-                                                              .title,
-                                                          price: product[index]
-                                                              .price,
-                                                          thumbnail:
-                                                              product[index]
-                                                                  .thumbnail,
-                                                          desc: product[index]
+                                                              products.id,
+                                                          title: products.title,
+                                                          price: products.price,
+                                                          thumbnail: products
+                                                              .thumbnail,
+                                                          desc: products
                                                               .description,
                                                         );
                                                     setState(() {
                                                       addedProductIds.add(
-                                                        product[index].id,
+                                                        products.id,
                                                       );
                                                     });
                                                   }
@@ -481,15 +515,23 @@ class _HomeState extends ConsumerState<Home> {
                                                   padding: EdgeInsets.all(10),
                                                   decoration: BoxDecoration(
                                                     shape: BoxShape.circle,
-                                                    color: AppTheme.secondary,
+                                                    color: Theme.of(
+                                                      context,
+                                                    ).cardColor,
                                                   ),
                                                   child: Icon(
                                                     addedProductIds.contains(
-                                                          product[index].id,
+                                                          products.id,
                                                         )
                                                         ? Icons.check
                                                         : Icons.add,
-                                                    color: AppTheme.primary,
+                                                    color:
+                                                        Theme.of(
+                                                              context,
+                                                            ).brightness ==
+                                                            Brightness.dark
+                                                        ? Colors.white
+                                                        : AppTheme.primary,
                                                   ),
                                                 ),
                                               ),

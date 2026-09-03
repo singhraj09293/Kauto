@@ -16,7 +16,12 @@ class _CartState extends ConsumerState<Cart> {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(20),
-      child: Icon(icon, color: Colors.black),
+      child: Icon(
+        icon,
+        color: Theme.of(context).brightness == Brightness.dark
+            ? Colors.white
+            : Colors.black,
+      ),
     );
   }
 
@@ -73,21 +78,24 @@ class _CartState extends ConsumerState<Cart> {
                       itemCount: cart.length,
                       itemBuilder: (context, index) {
                         final carts = cart[index];
-            
+
                         return Container(
                           padding: EdgeInsets.all(15),
                           margin: EdgeInsets.only(bottom: 10),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Theme.of(context).cardColor,
                             borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade200,
-                                blurRadius: 8,
-                                spreadRadius: 2,
-                                offset: Offset(0, 4),
-                              ),
-                            ],
+                            boxShadow:
+                                Theme.of(context).brightness == Brightness.dark
+                                ? [] // 👈 no shadow in dark mode
+                                : [
+                                    BoxShadow(
+                                      color: Colors.grey.shade200,
+                                      blurRadius: 8,
+                                      spreadRadius: 2,
+                                      offset: Offset(0, 4),
+                                    ),
+                                  ],
                           ),
                           child: Row(
                             children: [
@@ -126,7 +134,9 @@ class _CartState extends ConsumerState<Cart> {
                                             ref
                                                 .read(cartRepositoryProvider)
                                                 .removeFromCart(
-                                                  userId: ref.read(userProvider),
+                                                  userId: ref.read(
+                                                    userProvider,
+                                                  ),
                                                   productId: carts.productId,
                                                 );
                                           },
@@ -138,7 +148,7 @@ class _CartState extends ConsumerState<Cart> {
                                         ),
                                       ],
                                     ),
-            
+
                                     SizedBox(height: 10),
                                     Row(
                                       mainAxisAlignment:
@@ -147,7 +157,11 @@ class _CartState extends ConsumerState<Cart> {
                                         Text(
                                           '\$${(carts.price * carts.quantity).toStringAsFixed(2)}',
                                           style: TextStyle(
-                                            color: AppTheme.primary,
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                    Brightness.dark
+                                                ? Colors.white
+                                                : AppTheme.primary,
                                             fontSize: 22,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -155,7 +169,7 @@ class _CartState extends ConsumerState<Cart> {
                                         Container(
                                           padding: EdgeInsets.all(10),
                                           decoration: BoxDecoration(
-                                            color: Colors.white,
+                                            color: Theme.of(context).cardColor,
                                             borderRadius: BorderRadius.circular(
                                               10,
                                             ),
@@ -176,7 +190,13 @@ class _CartState extends ConsumerState<Cart> {
                                               Text(
                                                 carts.quantity.toString(),
                                                 style: TextStyle(
-                                                  color: AppTheme.outlinedText,
+                                                  color:
+                                                      Theme.of(
+                                                            context,
+                                                          ).brightness ==
+                                                          Brightness.dark
+                                                      ? Colors.white
+                                                      : AppTheme.primary,
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -207,16 +227,19 @@ class _CartState extends ConsumerState<Cart> {
                     child: Container(
                       padding: EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.shade200,
-                            blurRadius: 8,
-                            spreadRadius: 2,
-                            offset: Offset(0, 4), 
-                          ),
-                        ],
+                        boxShadow:
+                            Theme.of(context).brightness == Brightness.dark
+                            ? []
+                            : [
+                                BoxShadow(
+                                  color: Colors.grey.shade200,
+                                  blurRadius: 8,
+                                  spreadRadius: 2,
+                                  offset: Offset(0, 4),
+                                ),
+                              ],
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,7 +247,11 @@ class _CartState extends ConsumerState<Cart> {
                           Text(
                             'Order Summary',
                             style: TextStyle(
-                              color: Colors.black,
+                              color:
+                                  Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.white
+                                  : Colors.black,
                               fontWeight: FontWeight.bold,
                               fontSize: 25,
                             ),
@@ -288,14 +315,14 @@ class _CartState extends ConsumerState<Cart> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(height: 10),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppTheme.primary,
                       fixedSize: Size(360, 55),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadiusGeometry.circular(10)
-                      )
+                        borderRadius: BorderRadiusGeometry.circular(10),
+                      ),
                     ),
                     onPressed: () {},
                     child: Row(
@@ -303,7 +330,11 @@ class _CartState extends ConsumerState<Cart> {
                       children: [
                         Text(
                           'Proceed to Checkout',
-                          style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 18),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
                         ),
                         SizedBox(width: 7),
                         Icon(Icons.arrow_forward_ios, color: Colors.white),

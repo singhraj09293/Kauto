@@ -86,7 +86,7 @@ class _DetailState extends ConsumerState<Detail> {
                   topLeft: Radius.circular(30),
                   topRight: Radius.circular(30),
                 ),
-                color: Colors.white,
+                color: Theme.of(context).cardColor,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,45 +214,48 @@ class _DetailState extends ConsumerState<Detail> {
                     widget.product.description,
                     style: TextStyle(color: Colors.grey.shade600, fontSize: 18),
                   ),
-                  SizedBox(height: 80,)
+                  SizedBox(height: 80),
                 ],
               ),
             ),
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppTheme.primary,
-            fixedSize: Size(360, 55),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadiusGeometry.circular(10),
-            ),
-          ),
-          onPressed: () {
-            ref
-                .read(cartRepositoryProvider)
-                .addToCart(
-                  userId: ref.read(userProvider),
-                  productId: widget.product.id,
-                  title: widget.product.title,
-                  price: widget.product.price,
-                  thumbnail: widget.product.thumbnail,
-                  desc: widget.product.description,
-                );
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.shopping_bag_outlined, color: Colors.white),
-              SizedBox(width: 10),
-              Text(
-                'Add to Cart',
-                style: TextStyle(color: Colors.white, fontSize: 18),
+      bottomNavigationBar: Container(
+        color: Theme.of(context).cardColor,
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.primary,
+              fixedSize: Size(360, 55),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadiusGeometry.circular(10),
               ),
-            ],
+            ),
+            onPressed: () {
+              ref
+                  .read(cartRepositoryProvider)
+                  .addToCart(
+                    userId: ref.read(userProvider),
+                    productId: widget.product.id,
+                    title: widget.product.title,
+                    price: widget.product.price,
+                    thumbnail: widget.product.thumbnail,
+                    desc: widget.product.description,
+                  );
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.shopping_bag_outlined, color: Colors.white),
+                SizedBox(width: 10),
+                Text(
+                  'Add to Cart',
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
+              ],
+            ),
           ),
         ),
       ),

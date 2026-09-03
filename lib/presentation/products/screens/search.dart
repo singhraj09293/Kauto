@@ -58,10 +58,19 @@ class _SearchState extends ConsumerState<Search> {
                       borderSide: BorderSide.none,
                     ),
                     filled: true,
-                    fillColor: Colors.grey.shade200,
+                    fillColor: Theme.of(context).cardColor,
                     hintText: 'Search products..',
-                    hintStyle: TextStyle(color: Colors.grey.shade600),
-                    prefixIcon: Icon(Icons.search, color: Colors.black),
+                    hintStyle: TextStyle(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.grey.shade400
+                          : Colors.grey.shade600,
+                    ),
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Colors.black,
+                    ),
                     suffixIcon: searchProduct.text.isNotEmpty
                         ? IconButton(
                             onPressed: () {
@@ -114,14 +123,15 @@ class _SearchState extends ConsumerState<Search> {
                           ),
                           onPressed: () {
                             searchProduct.text = search;
-                            searchProduct.selection = TextSelection.fromPosition(
-                              TextPosition(offset: search.length),
-                            );
+                            searchProduct.selection =
+                                TextSelection.fromPosition(
+                                  TextPosition(offset: search.length),
+                                );
                           },
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          backgroundColor: Colors.white,
+                          backgroundColor: Theme.of(context).cardColor,
                           elevation: 2,
                         ),
                       );
@@ -157,7 +167,7 @@ class Trending extends ConsumerWidget {
               'Popular products',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 10),
             GridView.builder(
               itemCount: trending.length,
               shrinkWrap: true,
@@ -169,63 +179,77 @@ class Trending extends ConsumerWidget {
                 childAspectRatio: 0.57,
               ),
               itemBuilder: (context, index) {
-                return Container(
-                  margin: EdgeInsets.only(bottom: 10),
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.shade200,
-                        blurRadius: 10,
-                        spreadRadius: 3,
-                        offset: Offset(0, 0),
-                      ),
-                    ],
+                return GestureDetector(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => Detail(product: trending[index]),
+                    ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: ClipRRect(
-                          borderRadius: BorderRadiusGeometry.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20),
-                          ),
-                          child: Container(
-                            width: double.infinity,
-                            color: Colors.grey.shade50,
-                            child: Image.network(
-                              trending[index].thumbnail,
-                              fit: BoxFit.cover,
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 10),
+                    padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: Theme.of(context).brightness == Brightness.dark
+                          ? []
+                          : [
+                              BoxShadow(
+                                color: Colors.grey.shade200,
+                                blurRadius: 8,
+                                spreadRadius: 2,
+                                offset: Offset(0, 4),
+                              ),
+                            ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: BorderRadiusGeometry.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20),
+                            ),
+                            child: Container(
+                              width: double.infinity,
+                              color:
+                                  Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.grey.shade100
+                                  : Colors.grey.shade50,
+                              child: Image.network(
+                                trending[index].thumbnail,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
-                      ),
 
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text(
-                          trending[index].title,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Text(
+                            trending[index].title,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+
+                        Text(
+                          '\$${trending[index].price}',
                           style: TextStyle(
-                            fontSize: 18,
+                            color: AppTheme.primary,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-
-                      Text(
-                        '\$${trending[index].price}',
-                        style: TextStyle(
-                          color: AppTheme.primary,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               },
@@ -264,7 +288,7 @@ class _SearchResultState extends ConsumerState<SearchResult> {
               (e) => e.title.toLowerCase().contains(widget.query.toLowerCase()),
             )
             .toList();
-        
+
         if (result.isEmpty) {
           return Center(
             child: Column(
@@ -301,23 +325,30 @@ class _SearchResultState extends ConsumerState<SearchResult> {
                     margin: EdgeInsets.only(bottom: 10),
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).cardColor,
                       borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.shade200,
-                          blurRadius: 10,
-                          spreadRadius: 3,
-                          offset: Offset(0, 0),
-                        ),
-                      ],
+                      boxShadow: Theme.of(context).brightness == Brightness.dark
+                          ? []
+                          : [
+                              BoxShadow(
+                                color: Colors.grey.shade200,
+                                blurRadius: 8,
+                                spreadRadius: 2,
+                                offset: Offset(0, 4),
+                              ),
+                            ],
                     ),
                     child: Row(
                       children: [
                         Container(
                           height: 130,
                           width: 110,
-                          decoration: BoxDecoration(color: Colors.grey.shade50),
+                          decoration: BoxDecoration(
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                ? Colors.grey.shade100
+                                : Colors.grey.shade50,
+                          ),
                           child: Image.network(
                             pro.thumbnail,
                             fit: BoxFit.cover,

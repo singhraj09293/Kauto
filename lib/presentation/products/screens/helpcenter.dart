@@ -77,16 +77,18 @@ class HelpCenter extends StatelessWidget {
                   return Container(
                     margin: EdgeInsets.only(bottom: 10),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).cardColor,
                       borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.shade200,
-                          blurRadius: 8,
-                          spreadRadius: 2,
-                          offset: Offset(0, 4),
-                        ),
-                      ],
+                      boxShadow: Theme.of(context).brightness == Brightness.dark
+                          ? [] // 👈 no shadow in dark mode
+                          : [
+                              BoxShadow(
+                                color: Colors.grey.shade200,
+                                blurRadius: 8,
+                                spreadRadius: 2,
+                                offset: Offset(0, 4),
+                              ),
+                            ],
                     ),
                     child: ExpansionTile(
                       tilePadding: EdgeInsets.symmetric(

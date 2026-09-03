@@ -23,9 +23,7 @@ class _BottomMainState extends State<BottomMain> {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         decoration: BoxDecoration(
-          color: isActive
-              ? AppTheme.primary.withValues(alpha: 0.15)
-              : Colors.transparent,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
@@ -56,7 +54,7 @@ class _BottomMainState extends State<BottomMain> {
       bottomNavigationBar: Container(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color:Theme.of(context).cardColor,
           border: Border(
             top: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
           ),

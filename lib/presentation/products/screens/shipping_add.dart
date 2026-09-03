@@ -61,16 +61,19 @@ class _ShippingAddState extends ConsumerState<ShippingAdd> {
                           padding: EdgeInsets.all(20),
                           margin: EdgeInsets.only(bottom: 10),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Theme.of(context).cardColor,
                             borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade200,
-                                blurRadius: 8,
-                                spreadRadius: 2,
-                                offset: Offset(0, 4),
-                              ),
-                            ],
+                            boxShadow:
+                                Theme.of(context).brightness == Brightness.dark
+                                ? [] // 👈 no shadow in dark mode
+                                : [
+                                    BoxShadow(
+                                      color: Colors.grey.shade200,
+                                      blurRadius: 8,
+                                      spreadRadius: 2,
+                                      offset: Offset(0, 4),
+                                    ),
+                                  ],
                           ),
                           child: SingleChildScrollView(
                             child: Column(
@@ -147,7 +150,7 @@ class _ShippingAddState extends ConsumerState<ShippingAdd> {
                   prefixIcon: Icon(Icons.person, color: Colors.grey),
                   hintText: 'Full Name',
                   hintStyle: TextStyle(color: Colors.grey, fontSize: 18),
-                  fillColor: Colors.white,
+                  fillColor: Theme.of(context).cardColor,
                   filled: true,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -166,7 +169,7 @@ class _ShippingAddState extends ConsumerState<ShippingAdd> {
                   prefixIcon: Icon(Icons.phone, color: Colors.grey),
                   hintText: 'Phone Number',
                   hintStyle: TextStyle(color: Colors.grey, fontSize: 18),
-                  fillColor: Colors.white,
+                  fillColor: Theme.of(context).cardColor,
                   filled: true,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -188,7 +191,7 @@ class _ShippingAddState extends ConsumerState<ShippingAdd> {
                   ),
                   hintText: 'Address Line 1',
                   hintStyle: TextStyle(color: Colors.grey, fontSize: 18),
-                  fillColor: Colors.white,
+                  fillColor: Theme.of(context).cardColor,
                   filled: true,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -210,7 +213,7 @@ class _ShippingAddState extends ConsumerState<ShippingAdd> {
                   ),
                   hintText: 'Address Line 2 (Optional)',
                   hintStyle: TextStyle(color: Colors.grey, fontSize: 18),
-                  fillColor: Colors.white,
+                  fillColor: Theme.of(context).cardColor,
                   filled: true,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -236,7 +239,7 @@ class _ShippingAddState extends ConsumerState<ShippingAdd> {
                         ),
                         hintText: 'city',
                         hintStyle: TextStyle(color: Colors.grey, fontSize: 18),
-                        fillColor: Colors.white,
+                        fillColor: Theme.of(context).cardColor,
                         filled: true,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -260,7 +263,7 @@ class _ShippingAddState extends ConsumerState<ShippingAdd> {
                         ),
                         hintText: 'State',
                         hintStyle: TextStyle(color: Colors.grey, fontSize: 18),
-                        fillColor: Colors.white,
+                        fillColor: Theme.of(context).cardColor,
                         filled: true,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -283,7 +286,7 @@ class _ShippingAddState extends ConsumerState<ShippingAdd> {
                   prefixIcon: Icon(Icons.pin_outlined, color: Colors.grey),
                   hintText: 'Pincode / Zip Code',
                   hintStyle: TextStyle(color: Colors.grey, fontSize: 18),
-                  fillColor: Colors.white,
+                  fillColor: Theme.of(context).cardColor,
                   filled: true,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -300,10 +303,10 @@ class _ShippingAddState extends ConsumerState<ShippingAdd> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        padding: const EdgeInsets.all(10),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.all(12),
+            padding: EdgeInsets.all(15),
             backgroundColor: AppTheme.primary,
             fixedSize: Size(double.infinity, 55),
             shape: RoundedRectangleBorder(
