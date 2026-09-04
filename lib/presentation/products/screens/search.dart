@@ -302,159 +302,161 @@ class _SearchResultState extends ConsumerState<SearchResult> {
             ),
           );
         }
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '${result.length} Results for "${widget.query}"',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            ),
-            SizedBox(height: 20),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: result.length,
-              itemBuilder: (context, index) {
-                final pro = result[index];
-                return GestureDetector(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => Detail(product: pro)),
-                  ),
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: 10),
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: Theme.of(context).brightness == Brightness.dark
-                          ? []
-                          : [
-                              BoxShadow(
-                                color: Colors.grey.shade200,
-                                blurRadius: 8,
-                                spreadRadius: 2,
-                                offset: Offset(0, 4),
-                              ),
-                            ],
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${result.length} Results for "${widget.query}"',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+              SizedBox(height: 20),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: result.length,
+                itemBuilder: (context, index) {
+                  final pro = result[index];
+                  return GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => Detail(product: pro)),
                     ),
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 130,
-                          width: 110,
-                          decoration: BoxDecoration(
-                            color:
-                                Theme.of(context).brightness == Brightness.dark
-                                ? Colors.grey.shade100
-                                : Colors.grey.shade50,
-                          ),
-                          child: Image.network(
-                            pro.thumbnail,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        SizedBox(width: 20),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                pro.brand ?? '',
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  letterSpacing: 1.5,
-                                  fontSize: 15,
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: Theme.of(context).brightness == Brightness.dark
+                            ? []
+                            : [
+                                BoxShadow(
+                                  color: Colors.grey.shade200,
+                                  blurRadius: 8,
+                                  spreadRadius: 2,
+                                  offset: Offset(0, 4),
                                 ),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                pro.title,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
+                              ],
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 130,
+                            width: 110,
+                            decoration: BoxDecoration(
+                              color:
+                                  Theme.of(context).brightness == Brightness.dark
+                                  ? Colors.grey.shade100
+                                  : Colors.grey.shade50,
+                            ),
+                            child: Image.network(
+                              pro.thumbnail,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  pro.brand ?? '',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    letterSpacing: 1.5,
+                                    fontSize: 15,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 5),
-                              Row(
-                                children: [
-                                  Icon(Icons.star, color: Colors.amber),
-                                  SizedBox(width: 5),
-                                  Text(
-                                    pro.rating.toString(),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                    ),
+                                SizedBox(height: 5),
+                                Text(
+                                  pro.title,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
                                   ),
-                                ],
-                              ),
-                              SizedBox(height: 5),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Text(
-                                    '\$${pro.price}',
-                                    style: TextStyle(
-                                      color: AppTheme.outlinedText,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-
-                                  CircleAvatar(
-                                    backgroundColor: AppTheme.primary
-                                        .withValues(alpha: 0.1),
-                                    child: IconButton(
-                                      onPressed: () {
-                                        final isWished = wishedProduct.contains(
-                                          pro.id,
-                                        );
-                                        if (isWished) {
-                                          ref
-                                              .read(wishlistRepositoryProvider)
-                                              .removeWhishList(
-                                                userId: ref.read(userProvider),
-                                                productId: pro.id,
-                                              );
-                                        } else {
-                                          ref
-                                              .read(wishlistRepositoryProvider)
-                                              .addToWhishList(
-                                                userId: ref.read(userProvider),
-                                                productId: pro.id,
-                                                title: pro.title,
-                                                price: pro.price,
-                                                thumbnail: pro.thumbnail,
-                                              );
-                                        }
-                                      },
-                                      icon: Icon(
-                                        wishedProduct.contains(pro.id)
-                                            ? Icons.favorite
-                                            : Icons.favorite_outline,
-                                        color: wishedProduct.contains(pro.id)
-                                            ? Colors.red
-                                            : Colors.grey,
+                                ),
+                                SizedBox(height: 5),
+                                Row(
+                                  children: [
+                                    Icon(Icons.star, color: Colors.amber),
+                                    SizedBox(width: 5),
+                                    Text(
+                                      pro.rating.toString(),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                                SizedBox(height: 5),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Text(
+                                      '\$${pro.price}',
+                                      style: TextStyle(
+                                        color: AppTheme.outlinedText,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+          
+                                    CircleAvatar(
+                                      backgroundColor: AppTheme.primary
+                                          .withValues(alpha: 0.1),
+                                      child: IconButton(
+                                        onPressed: () {
+                                          final isWished = wishedProduct.contains(
+                                            pro.id,
+                                          );
+                                          if (isWished) {
+                                            ref
+                                                .read(wishlistRepositoryProvider)
+                                                .removeWhishList(
+                                                  userId: ref.read(userProvider),
+                                                  productId: pro.id,
+                                                );
+                                          } else {
+                                            ref
+                                                .read(wishlistRepositoryProvider)
+                                                .addToWhishList(
+                                                  userId: ref.read(userProvider),
+                                                  productId: pro.id,
+                                                  title: pro.title,
+                                                  price: pro.price,
+                                                  thumbnail: pro.thumbnail,
+                                                );
+                                          }
+                                        },
+                                        icon: Icon(
+                                          wishedProduct.contains(pro.id)
+                                              ? Icons.favorite
+                                              : Icons.favorite_outline,
+                                          color: wishedProduct.contains(pro.id)
+                                              ? Colors.red
+                                              : Colors.grey,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
-          ],
+                  );
+                },
+              ),
+            ],
+          ),
         );
       },
       error: (e, st) => Text('Error $e'),

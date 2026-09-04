@@ -106,7 +106,9 @@ class _HomeState extends ConsumerState<Home> {
                 ),
                 SizedBox(height: 20),
                 searchProduct.text.trim().isNotEmpty
-                    ? SearchResult(query: searchProduct.text.trim())
+                    ? Expanded(
+                        child: SearchResult(query: searchProduct.text.trim()),
+                      )
                     : Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -547,7 +549,6 @@ class _HomeState extends ConsumerState<Home> {
                           ],
                         ),
                       ),
-                SizedBox(height: 20),
               ],
             ),
           ),
